@@ -1,10 +1,11 @@
 const express = require("express");
+const fs = require("fs");
 const app = express();
 app.use(express.json());
 
 //NEW: our "database" for now, a list of books
 
-let books = [
+/*let books = [
     {id: 1, title: "Wings of Fire", author: "A. P. J. Abdul Kalam"},
     {id: 2, title:"The Alchemist", author: "Paulo Coelho"},
     {id: 3, title: "Atomic Habits", author: "James Clear"}
@@ -12,6 +13,26 @@ let books = [
 ];
 let nextId = 4;
 app.get("/", function (req, res){
+    res.send("Hello from my first API!");
+});*/
+
+//CHANGED: load books from the file
+let books = JSON.parse(fs.readFileSync("book.json", "utf8"));
+
+//CHANGED: next id = biggest existing id +1
+let nextId = 1;
+books.forEach(function (b){
+    if (b.id >= nextId){
+        nextId = b.id + 1;
+    }
+});
+
+//NEW: save books to the file
+function saveBooks(){
+    fs.writeFileSync("books.json",JSON.stringify(books, null, 2));
+}
+
+app.get("/",function (req, res){
     res.send("Hello from my first API!");
 });
 
@@ -70,6 +91,8 @@ app.put("/books/:id",function(req, res){
     if (req.body.author){
         book.author = req.body.author;
     }
+
+    saveBooks();
     res.json(book);
 });
 
@@ -84,6 +107,7 @@ app.delete("/books/:id",function (req, res) {
         return res.status(404).json({ message: "Book not found"});
     }
     books.splice(index, 1);
+    saveBooks();
     res.json({ message: "Book deleted"});
 });
 app.listen(3000, function (){
