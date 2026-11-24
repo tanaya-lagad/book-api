@@ -52,7 +52,42 @@ app.post("/books", function(req, res){
     books.push(newBook);
     res.status(201).json(newBook);
 });
+
+// NEW: update a book
+app.put("/books/:id",function(req, res){
+    const id = Number(req.params.id);
+    const book = book.find(function (b) {
+        return b.id == id;
+    });
+
+    if (!book) {
+        return res.status(404).json({ message: "Book not found"});
+    }
+
+    if (req.body.title){
+        book.title = req.body.title;
+    }
+    if (req.body.author){
+        book.author = req.body.author;
+    }
+    res.json(book);
+});
+
+//NEW: delete a book
+app.delete("/books/:id",function (req, res) {
+    const id = Number(req.params.id);
+    const index = books.findIndex(function (b){
+        return b.id === id;
+    });
+
+    if (index === -1){
+        return res.status(404).json({ message: "Book not found"});
+    }
+    books.splice(index, 1);
+    res.json({ message: "Book deleted"});
+});
 app.listen(3000, function (){
     console.log("Server running at http://localhost:3000");
 
 });
+

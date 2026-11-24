@@ -20,3 +20,16 @@ Content-Type: application/json
 {
     "title":"Book Without Author"
 }
+
+### update a book
+PUT http://localhost:3000/books/1
+Content-Type: application/json
+{
+    "title": "Wings of Fire (Updated Edition)"
+}
+
+### Delete a book
+DELETE http://localhost:3000/books/3
+
+### Delete a book that does not exist
+DELETE http://localhost:3000/books/99
