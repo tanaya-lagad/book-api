@@ -1,0 +1,22 @@
+### Get all books
+GET http://localhost:3000/books
+
+### Get one book
+GET http://localhost:3000/books/2
+
+### Add a new book
+POST http://localhost:3000/books
+Content-Type: application/json
+
+{
+    "title": "Rich Dad Poor Dad",
+    "author": "Robert kiyosaki"
+}
+
+### Add a book with missing author (should fail)
+POST http://localhost:3000/books
+Content-Type: application/json
+
+{
+    "title":"Book Without Author"
+}
